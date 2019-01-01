@@ -114,6 +114,7 @@ class Net(nn.Module):
         pooled4 = self.pool4(conv5)
 
         flatten = pooled4.view(-1, 100*18*18)
+
        	h = F.relu(self.fc1(flatten))
         h = F.relu(self.fc2(h))
         output = self.out(h)
@@ -184,7 +185,7 @@ def evaluate(model, loader, criterion):
             )  # also sigmoid because its not used without loss function
 
             # micro-averaged f1 is used for determining the best model.
-            f1 = f1_score(rounded_preds, y, average='micro')
+            f1 = f1_score(rounded_preds.cpu(), y.cpu(), average='micro')
 
             epoch_loss += loss.data.item()
             epoch_f1 += f1.item()
